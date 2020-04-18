@@ -32,6 +32,8 @@ interface ILangText {
 interface LangLabel {
     TableTitle: string
     timeMark: string
+    Droplist: string
+    DropOption: string[]
 }
 
 function App() {
@@ -126,21 +128,32 @@ function App() {
     return (
         <div className="App">
             <div className="langDropdown">
-                <Dropdown
-                    onCommand={(e: string) => {
-                        setUserLang(e)
-                    }}
-                    menu={
-                        <Dropdown.Menu>
-                            <Dropdown.Item command="zh-TW">繁體中文</Dropdown.Item>
-                            <Dropdown.Item command="en-US">英語</Dropdown.Item>
-                        </Dropdown.Menu>
-                    }
-                >
-                    <span className="el-dropdown-link">
-                        切換語言<i className="el-icon-caret-bottom el-icon--right"></i>
-                    </span>
-                </Dropdown>
+                {LangTexts ? (
+                    <Dropdown
+                        onCommand={(e: string) => {
+                            setUserLang(e)
+                        }}
+                        menu={
+                            <Dropdown.Menu>
+                                <Dropdown.Item command="zh-TW">
+                                    {UserLang === "zh-TW"
+                                        ? LangTexts["zh-TW"].DropOption[0]
+                                        : LangTexts["default"].DropOption[0]}
+                                </Dropdown.Item>
+                                <Dropdown.Item command="en-US">
+                                    {UserLang === "zh-TW"
+                                        ? LangTexts["zh-TW"].DropOption[1]
+                                        : LangTexts["default"].DropOption[1]}
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        }
+                    >
+                        <span className="el-dropdown-link">
+                            {UserLang === "zh-TW" ? LangTexts["zh-TW"].Droplist : LangTexts["default"].Droplist}
+                            <i className="el-icon-caret-bottom el-icon--right"></i>
+                        </span>
+                    </Dropdown>
+                ) : null}
             </div>
             <div className="section_title">
                 {UserLang === "zh-TW" ? LangTexts["zh-TW"].TableTitle : LangTexts["default"].TableTitle}

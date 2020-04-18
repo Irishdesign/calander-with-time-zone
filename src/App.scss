@@ -45,6 +45,9 @@ body {
 .langDropdown {
     display: flex;
     justify-content: flex-end;
+    .el-dropdown {
+        cursor: pointer;
+    }
 }
 
 .calander_head {
