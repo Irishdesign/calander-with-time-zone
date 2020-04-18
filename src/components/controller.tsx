@@ -1,14 +1,21 @@
 import React from "react"
 import "element-theme-default"
-function ScheduleController() {
+const cx = require("classnames")
+
+interface I_Props {
+    leftBtnActive?: boolean
+}
+
+function ScheduleController(props: I_Props) {
     return (
         <div className="schedule_control">
             <div className="fixed_part">
                 <div className="buttion_group">
-                    <button>
+                    <button className={cx({ disabled: props.leftBtnActive })}>
                         <i className="el-icon-arrow-left" />
                     </button>
-                    <button>
+
+                    <button className="active">
                         <i className="el-icon-arrow-right" />
                     </button>
                 </div>

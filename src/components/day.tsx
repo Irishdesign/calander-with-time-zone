@@ -10,13 +10,18 @@ interface I_Props {
 
 function DayCreater(props: I_Props) {
     const { date, initTable, bookedIndex, availableIndex } = props
+    const today = dayjs("2020-04-22")
+    console.log("date.isBefore(today)", date.isBefore(today))
+    console.log(date)
+    console.log(today)
+
     return (
         <div className="day_container">
-            <div className="day_header">
+            <div className={cx("day_header", { expired: date.isBefore(today) })}>
                 <div className="weekday">{date.format("ddd")}</div>
                 <div className="date">{date.format("DD")}</div>
             </div>
-            <div className="day_body">
+            <div className={cx("day_body", { expired: date.isBefore(today) })}>
                 {initTable.map((time, i) => {
                     return (
                         <div

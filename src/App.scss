@@ -7,6 +7,7 @@ $gray: #d2d2d2;
     }
     border: 1px solid $green;
 }
+
 * {
     min-width: 0;
     min-height: 0;
@@ -58,7 +59,6 @@ body {
                     display: inline-block;
                     line-height: 1;
                     white-space: nowrap;
-                    cursor: pointer;
                     background: #fff;
                     border: 1px solid #dcdfe6;
                     text-align: center;
@@ -69,7 +69,7 @@ body {
                     font-weight: 500;
                     i {
                         &::before {
-                            color: #606266;
+                            color: $gray;
                             font-size: 9px;
                             font-weight: 100;
                         }
@@ -78,13 +78,19 @@ body {
                         border-right: transparent;
                         border-top-right-radius: 0px;
                         border-bottom-right-radius: 0px;
+                    }
+                }
+                button.active {
+                    cursor: pointer;
+                    i {
+                        &::before {
+                            color: #606266;
+                        }
+                    }
+                    &:nth-child(1) {
                         &:hover {
-                            // border: 1px solid $green;
                             @include btn_hover;
                             border-right: transparent;
-                            // i::before {
-                            //     color: $green;
-                            // }
                         }
                     }
                     &:nth-child(2) {
@@ -138,6 +144,12 @@ body {
         .day_header {
             border-top: 4px solid $green;
             padding: 10px 0;
+            &.expired {
+                border-top: 4px solid $gray;
+                div {
+                    color: $gray;
+                }
+            }
         }
         .day_body {
             display: grid;
@@ -154,6 +166,9 @@ body {
                 &.show {
                     display: unset;
                 }
+            }
+            &.expired {
+                display: none;
             }
         }
     }
