@@ -11,7 +11,7 @@ export const getLangText = () => {
         },
         default: {
             TableTitle: "Availbale Time",
-            timeMark: `* All the timings listed are in your timezone:${City} (${GMT})`,
+            timeMark: `* All the timings listed are in your timezone: ${City} (${GMT})`,
             Droplist: "Language",
             DropOption: ["Chinese", "English"],
         },
