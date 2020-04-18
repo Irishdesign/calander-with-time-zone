@@ -1,0 +1,160 @@
+$green: #02cab9;
+$gray: #d2d2d2;
+
+@mixin btn_hover {
+    i::before {
+        color: $green;
+    }
+    border: 1px solid $green;
+}
+* {
+    min-width: 0;
+    min-height: 0;
+    box-sizing: border-box;
+    outline: 0;
+    color: #484848;
+}
+body {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+@font-face {
+    font-family: "helveticaneuelight";
+    src: url("http://snippethosted.googlecode.com/svn/helveticaneue-light-webfont.eot");
+    src: url("http://snippethosted.googlecode.com/svn/helveticaneue-light-webfont.eot?#iefix")
+            format("embedded-opentype"),
+        url("http://snippethosted.googlecode.com/svn/helveticaneue-light-webfont.woff") format("woff"),
+        url("http://snippethosted.googlecode.com/svn/helveticaneue-light-webfont.ttf") format("truetype"),
+        url("http://snippethosted.googlecode.com/svn/helveticaneue-light-webfont.svg#helveticaneuelight") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+.App {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+.section_title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.calander_head {
+    .schedule_control {
+        display: inline-block;
+        width: 100%;
+        .fixed_part {
+            display: inline-block;
+            width: 240px;
+            .buttion_group {
+                width: 90px;
+                display: inline-block;
+                button {
+                    padding: 7px 17px;
+                    font-size: 12px;
+                    border-radius: 3px;
+                    display: inline-block;
+                    line-height: 1;
+                    white-space: nowrap;
+                    cursor: pointer;
+                    background: #fff;
+                    border: 1px solid #dcdfe6;
+                    text-align: center;
+                    box-sizing: border-box;
+                    outline: none;
+                    margin: 0;
+                    transition: 0.1s;
+                    font-weight: 500;
+                    i {
+                        &::before {
+                            color: #606266;
+                            font-size: 9px;
+                            font-weight: 100;
+                        }
+                    }
+                    &:nth-child(1) {
+                        border-right: transparent;
+                        border-top-right-radius: 0px;
+                        border-bottom-right-radius: 0px;
+                        &:hover {
+                            // border: 1px solid $green;
+                            @include btn_hover;
+                            border-right: transparent;
+                            // i::before {
+                            //     color: $green;
+                            // }
+                        }
+                    }
+                    &:nth-child(2) {
+                        border-top-left-radius: 0px;
+                        border-bottom-left-radius: 0px;
+                        &:hover {
+                            // border: 1px solid $green;
+                            @include btn_hover;
+                        }
+                    }
+                    &.disable {
+                        background-color: #fff;
+                        border-color: #ebeef5;
+                        color: #c0c4cc;
+                        cursor: not-allowed;
+                        background-image: none;
+                    }
+                }
+            }
+            .label_box {
+                padding-left: 15px;
+                display: inline-block;
+                width: 150px;
+            }
+        }
+        .rws_part {
+            float: right;
+            display: flex;
+            .time_zone_description {
+                justify-content: end;
+
+                span {
+                    text-align: right;
+                    font-size: 12px;
+                    line-height: 25px;
+                }
+            }
+        }
+    }
+}
+
+.calander_body {
+    display: flex;
+    padding: 15px 0;
+    min-width: 280px;
+    .day_container {
+        flex: 1;
+        flex-direction: column;
+        text-align: center;
+        padding: 0 5px;
+        .day_header {
+            border-top: 4px solid $green;
+            padding: 10px 0;
+        }
+        .day_body {
+            display: grid;
+            div {
+                padding: 3px 0;
+                border: 1px solid transparent;
+                color: #b6b6b6;
+                font-size: 0.75rem !important;
+                display: none;
+                &.green {
+                    color: $green;
+                    display: unset;
+                }
+                &.show {
+                    display: unset;
+                }
+            }
+        }
+    }
+}
