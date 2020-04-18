@@ -10,43 +10,42 @@ import { getDateOrTime, getEachIndexArr, initClassTimeCol, getLangText } from ".
 import { Dropdown } from "element-react"
 import "element-theme-default"
 
-export interface IndexArr {
+interface IndexArr {
     [key: string]: number[]
 }
 
-interface Idate {
+interface IDate {
     start: string
     end: string
 }
 
-interface W_arragement {
+interface IW_arragement {
     available: IndexArr
     booked: IndexArr
 }
 
 interface ILangText {
-    "zh-TW": LangLabel
-    default: LangLabel
+    "zh-TW": ILangLabel
+    default: ILangLabel
 }
 
-interface LangLabel {
+interface ILangLabel {
     TableTitle: string
-    timeMark: string
+    TimeMark: string
     Droplist: string
     DropOption: string[]
 }
 
 function App() {
     const { useState, useEffect } = React
-    const [weekTitle, setWeekTitle] = useState<Dayjs[]>([])
-    const [initTable] = useState(initClassTimeCol)
-    const [WeekArrangement, setWeekArrangement] = useState<W_arragement>({ available: {}, booked: {} })
+    const [WeekTitle, setWeekTitle] = useState<Dayjs[]>([])
+    const [initTimeTable] = useState(initClassTimeCol) // 初始時間表（全部時間）
+    const [WeekArrangement, setWeekArrangement] = useState<IW_arragement>({ available: {}, booked: {} }) // 本週各日時間 by 日期
     const [Data, setData] = useState(rowData)
-    const [page, setPage] = useState(0)
+    const [Page, setPage] = useState(0)
     const [BtnActive, setBtnActive] = useState([false, true])
     const [UserLang, setUserLang] = useState(navigator.language)
-
-    const LangTexts: ILangText = getLangText()
+    const LangTexts: ILangText = getLangText() // 語系標籤
     //init
     useEffect(() => {
         createWeekTitle()
@@ -54,7 +53,7 @@ function App() {
     }, [Data])
 
     useEffect(() => {
-        switch (page) {
+        switch (Page) {
             case 0:
                 setData(rowData)
                 setBtnActive([false, true])
@@ -68,7 +67,7 @@ function App() {
                 setBtnActive([true, false])
                 return
         }
-    }, [page])
+    }, [Page])
 
     const createWeekTitle = () => {
         const LocalDate = getDateOrTime(Data.available[0].start, "d")
@@ -93,24 +92,24 @@ function App() {
         setWeekArrangement({ available: availableIndex, booked: bookedIndex })
     }
 
-    const getIndexArrForEachDate = (targetData: Idate[]) => {
+    const getIndexArrForEachDate = (targetData: IDate[]) => {
         const IndexArray: IndexArr = {}
         targetData.forEach((date) => {
             const startD = getDateOrTime(date.start, "d")
             const endD = getDateOrTime(date.end, "d")
             const startT = getDateOrTime(date.start, "t")
             const endT = getDateOrTime(date.end, "t")
-            const startT_index = initTable.indexOf(startT)
-            const endT_index = initTable.indexOf(endT)
+            const startT_index = initTimeTable.indexOf(startT)
+            const endT_index = initTimeTable.indexOf(endT)
 
             IndexArray[startD] = IndexArray[startD] ? [...IndexArray[startD]] : []
             IndexArray[endD] = IndexArray[endD] ? [...IndexArray[endD]] : []
 
             let forStartD = getEachIndexArr(startT_index, endT_index)
-
             if (startD === endD) {
                 IndexArray[startD].push(...forStartD)
             } else {
+                //處理跨日情況
                 forStartD = getEachIndexArr(startT_index, 48)
                 const forEndD = getEachIndexArr(0, endT_index)
                 IndexArray[startD].push(...forStartD)
@@ -119,9 +118,10 @@ function App() {
         })
         return IndexArray
     }
+
     const onHandlePage = (type: string) => {
-        if (page === 0 && type === "l") return
-        if (page === 2 && type === "r") return
+        if (Page === 0 && type === "l") return
+        if (Page === 2 && type === "r") return
         type === "r" ? setPage((prev) => prev + 1) : setPage((prev) => prev - 1)
     }
 
@@ -161,20 +161,20 @@ function App() {
             <div className="calander_head">
                 <Controller
                     BtnActive={BtnActive}
-                    weekTitle={weekTitle}
+                    WeekTitle={WeekTitle}
                     handlePage={(str: string) => onHandlePage(str)}
-                    TimeMark={UserLang === "zh-TW" ? LangTexts["zh-TW"].timeMark : LangTexts["default"].timeMark}
+                    TimeMark={UserLang === "zh-TW" ? LangTexts["zh-TW"].TimeMark : LangTexts["default"].TimeMark}
                 />
             </div>
             <div className="calander_body">
-                {weekTitle
-                    ? weekTitle.map((date, i) => {
+                {WeekTitle
+                    ? WeekTitle.map((date, i) => {
                           const YYYY_MM_DD = date.format("YYYY-MM-DD")
                           return (
                               <DayCreater
                                   UserLang={UserLang}
-                                  date={date}
-                                  initTable={initTable}
+                                  _date={date}
+                                  initTimeTable={initTimeTable}
                                   key={YYYY_MM_DD}
                                   bookedIndex={WeekArrangement["booked"][YYYY_MM_DD]}
                                   availableIndex={WeekArrangement["available"][YYYY_MM_DD]}

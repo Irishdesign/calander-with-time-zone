@@ -4,13 +4,13 @@ const cx = require("classnames")
 
 interface I_Props {
     BtnActive: boolean[]
-    weekTitle: dayjs.Dayjs[]
+    WeekTitle: dayjs.Dayjs[]
     handlePage: (str: string) => void
     TimeMark: string[] | string
 }
 
 function ScheduleController(props: I_Props) {
-    const { BtnActive, weekTitle, handlePage, TimeMark } = props
+    const { BtnActive, WeekTitle, handlePage, TimeMark } = props
     return (
         <div className="schedule_control">
             <div className="fixed_part">
@@ -29,9 +29,9 @@ function ScheduleController(props: I_Props) {
                         <i className="el-icon-arrow-right" />
                     </button>
                 </div>
-                {weekTitle ? (
+                {WeekTitle ? (
                     <div className="label_box">
-                        {weekTitle[0]?.format("YYYY/MM/DD")} - {weekTitle[6]?.format("DD")}
+                        {WeekTitle[0]?.format("YYYY/MM/DD")} - {WeekTitle[6]?.format("DD")}
                     </div>
                 ) : null}
             </div>
