@@ -10,8 +10,8 @@ import { getDateOrTime, getEachIndexArr, initClassTimeCol } from "./utility"
 import DayCreater from "./components/day"
 
 import "dayjs/locale/es" // 按需加載
-import { stringify } from "querystring"
 
+//TODO: 支援 i18n 英文和中文兩種語言
 dayjs.locale("zh-tw") // 全局使用西班牙語
 
 // dayjs("2018-05-05")
@@ -40,30 +40,53 @@ function App() {
     const [weekTitle, setWeekTitle] = useState<Dayjs[]>([])
     const [initTable, setInitTable] = useState(initClassTimeCol)
     const [WeekArrangement, setWeekArrangement] = useState<W_arragement>({ available: {}, booked: {} })
-
+    const [Data, setData] = useState(rowData)
+    const [page, setPage] = useState(0)
+    const [BtnActive, setBtnActive] = useState([false, true])
     //init
     useEffect(() => {
+        initApp()
+    }, [Data])
+
+    const initApp = () => {
         createWeekTitle()
         initArrangement()
-    }, [])
+    }
+    useEffect(() => {
+        switch (page) {
+            case 0:
+                setData(rowData)
+                setBtnActive([false, true])
+                return
+            case 1:
+                setData(rowData2)
+                setBtnActive([true, true])
+                return
+            case 2:
+                setData(rowData3)
+                setBtnActive([true, false])
+                return
+        }
+    }, [page])
 
     const createWeekTitle = () => {
-        const today = new Date("2020-04-19")
-        const today_weekday = today.getDay()
+        const LocalDate = getDateOrTime(Data.available[0].start, "d")
+        const LocalTime = getDateOrTime(Data.available[0].start, "t")
 
+        const today = new Date(`${LocalDate} ${LocalTime}:00`)
+        const today_weekday = today.getDay()
         const startDate = dayjs(today).add(-today_weekday, "day")
 
         const DaysInTheWeek = []
         for (let i = 0; i < 7; i++) {
             DaysInTheWeek.push(dayjs(startDate).add(i, "day"))
         }
-        console.log(DaysInTheWeek)
         setWeekTitle(DaysInTheWeek)
     }
 
     const initArrangement = () => {
-        const availableIndex = getIndexArrForEachDate(rowData.available)
-        const bookedIndex = getIndexArrForEachDate(rowData.booked)
+        const availableIndex = getIndexArrForEachDate(Data.available)
+        const bookedIndex = getIndexArrForEachDate(Data.booked)
         console.log("availableIndex", availableIndex)
         console.log("bookedIndex", bookedIndex)
         setWeekArrangement({ available: availableIndex, booked: bookedIndex })
@@ -95,12 +118,21 @@ function App() {
         })
         return IndexArray
     }
+    const onHandlePage = (type: string) => {
+        if (page === 0 && type === "l") return
+        if (page === 2 && type === "r") return
+        type === "r" ? setPage((prev) => prev + 1) : setPage((prev) => prev - 1)
+    }
 
     return (
         <div className="App">
             <div className="section_title">Available times</div>
             <div className="calander_head">
-                <Controller leftBtnActive={false} />
+                <Controller
+                    BtnActive={BtnActive}
+                    weekTitle={weekTitle}
+                    handlePage={(str: string) => onHandlePage(str)}
+                />
             </div>
             <div className="calander_body">
                 {weekTitle

@@ -1,3 +1,4 @@
+import dayjs from "dayjs"
 export const getEachIndexArr = (from: number, to: number) => {
     const arr = []
     for (let i = from; i <= to; i++) {
@@ -7,12 +8,15 @@ export const getEachIndexArr = (from: number, to: number) => {
 }
 export const getDateOrTime = (str: string, type: string) => {
     let res = ""
+    let UTCTimeObj = new Date(str)
+    const localStr = UTCTimeObj.toLocaleString()
+    const dateArr = localStr.split(",")[0].split("/")
     switch (type) {
         case "t":
-            res = str.split("T")[1].slice(0, 5)
+            res = localStr.split(",")[1].trim().slice(0, 5)
             break
         case "d":
-            res = str.split("T")[0]
+            res = dateArr[2] + "-" + dateArr[1] + "-" + dateArr[0]
             break
     }
     return res

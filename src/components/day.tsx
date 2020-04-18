@@ -11,9 +11,6 @@ interface I_Props {
 function DayCreater(props: I_Props) {
     const { date, initTable, bookedIndex, availableIndex } = props
     const today = dayjs("2020-04-22")
-    console.log("date.isBefore(today)", date.isBefore(today))
-    console.log(date)
-    console.log(today)
 
     return (
         <div className="day_container">
