@@ -42,6 +42,11 @@ body {
     margin-bottom: 20px;
 }
 
+.langDropdown {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .calander_head {
     .schedule_control {
         display: inline-block;

@@ -6,16 +6,17 @@ interface I_Props {
     initTable: string[]
     bookedIndex: number[]
     availableIndex: number[]
+    UserLang: string
 }
 
 function DayCreater(props: I_Props) {
-    const { date, initTable, bookedIndex, availableIndex } = props
-    const today = dayjs("2020-04-22")
-
+    const { date, initTable, bookedIndex, availableIndex, UserLang } = props
+    const today = dayjs()
+    const cn_Week = ["日", "一", "二", "三", "四", "五", "六"]
     return (
         <div className="day_container">
             <div className={cx("day_header", { expired: date.isBefore(today) })}>
-                <div className="weekday">{date.format("ddd")}</div>
+                <div className="weekday">{UserLang === "zh-TW" ? cn_Week[date.day()] : date.format("ddd")}</div>
                 <div className="date">{date.format("DD")}</div>
             </div>
             <div className={cx("day_body", { expired: date.isBefore(today) })}>
@@ -32,9 +33,6 @@ function DayCreater(props: I_Props) {
                         </div>
                     )
                 })}
-                {/* {availableIndex.map((time_idx) => {
-                    return <div key={initTable[time_idx]}>{initTable[time_idx]}</div>
-                })} */}
             </div>
         </div>
     )

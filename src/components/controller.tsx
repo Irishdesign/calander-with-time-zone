@@ -1,5 +1,4 @@
 import React from "react"
-import "element-theme-default"
 import dayjs from "dayjs"
 const cx = require("classnames")
 
@@ -7,10 +6,11 @@ interface I_Props {
     BtnActive: boolean[]
     weekTitle: dayjs.Dayjs[]
     handlePage: (str: string) => void
+    TimeMark: string[] | string
 }
 
 function ScheduleController(props: I_Props) {
-    const { BtnActive, weekTitle, handlePage } = props
+    const { BtnActive, weekTitle, handlePage, TimeMark } = props
     return (
         <div className="schedule_control">
             <div className="fixed_part">
@@ -37,7 +37,7 @@ function ScheduleController(props: I_Props) {
             </div>
             <div className="rws_part">
                 <div className="time_zone_description">
-                    <span>* All the timings listed are in your timezone: Taipei (GMT+08:00)</span>
+                    <span>{Array.isArray(TimeMark) ? TimeMark[0] + "GMT" + TimeMark[1] : TimeMark}</span>
                 </div>
             </div>
         </div>

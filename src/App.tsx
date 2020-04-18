@@ -1,30 +1,19 @@
 import React from "react"
 import "./App.scss"
+import dayjs, { Dayjs } from "dayjs"
 import rowData from "./data.json"
 import rowData2 from "./data2.json"
 import rowData3 from "./data3.json"
-import dayjs, { Dayjs } from "dayjs"
 import Controller from "./components/controller"
-import { getDateOrTime, getEachIndexArr, initClassTimeCol } from "./utility"
-
 import DayCreater from "./components/day"
+import { getDateOrTime, getEachIndexArr, initClassTimeCol, getLangText } from "./utility"
+import { Dropdown } from "element-react"
+import "element-theme-default"
 
-import "dayjs/locale/es" // 按需加載
-
-//TODO: 支援 i18n 英文和中文兩種語言
-dayjs.locale("zh-tw") // 全局使用西班牙語
-
-// dayjs("2018-05-05")
-//   .locale("zh-tw")
-//   .format(); // 局部使用繁體中文
 export interface IndexArr {
     [key: string]: number[]
 }
 
-interface Idata {
-    available: Idate[]
-    booked: Idate[]
-}
 interface Idate {
     start: string
     end: string
@@ -35,23 +24,33 @@ interface W_arragement {
     booked: IndexArr
 }
 
+interface ILangText {
+    "zh-TW": LangLabel
+    default: LangLabel
+}
+
+interface LangLabel {
+    TableTitle: string
+    timeMark: string
+}
+
 function App() {
     const { useState, useEffect } = React
     const [weekTitle, setWeekTitle] = useState<Dayjs[]>([])
-    const [initTable, setInitTable] = useState(initClassTimeCol)
+    const [initTable] = useState(initClassTimeCol)
     const [WeekArrangement, setWeekArrangement] = useState<W_arragement>({ available: {}, booked: {} })
     const [Data, setData] = useState(rowData)
     const [page, setPage] = useState(0)
     const [BtnActive, setBtnActive] = useState([false, true])
+    const [UserLang, setUserLang] = useState(navigator.language)
+
+    const LangTexts: ILangText = getLangText()
     //init
     useEffect(() => {
-        initApp()
-    }, [Data])
-
-    const initApp = () => {
         createWeekTitle()
         initArrangement()
-    }
+    }, [Data])
+
     useEffect(() => {
         switch (page) {
             case 0:
@@ -87,8 +86,8 @@ function App() {
     const initArrangement = () => {
         const availableIndex = getIndexArrForEachDate(Data.available)
         const bookedIndex = getIndexArrForEachDate(Data.booked)
-        console.log("availableIndex", availableIndex)
-        console.log("bookedIndex", bookedIndex)
+        // console.log("availableIndex", availableIndex)
+        // console.log("bookedIndex", bookedIndex)
         setWeekArrangement({ available: availableIndex, booked: bookedIndex })
     }
 
@@ -126,12 +125,32 @@ function App() {
 
     return (
         <div className="App">
-            <div className="section_title">Available times</div>
+            <div className="langDropdown">
+                <Dropdown
+                    onCommand={(e: string) => {
+                        setUserLang(e)
+                    }}
+                    menu={
+                        <Dropdown.Menu>
+                            <Dropdown.Item command="zh-TW">繁體中文</Dropdown.Item>
+                            <Dropdown.Item command="en-US">英語</Dropdown.Item>
+                        </Dropdown.Menu>
+                    }
+                >
+                    <span className="el-dropdown-link">
+                        切換語言<i className="el-icon-caret-bottom el-icon--right"></i>
+                    </span>
+                </Dropdown>
+            </div>
+            <div className="section_title">
+                {UserLang === "zh-TW" ? LangTexts["zh-TW"].TableTitle : LangTexts["default"].TableTitle}
+            </div>
             <div className="calander_head">
                 <Controller
                     BtnActive={BtnActive}
                     weekTitle={weekTitle}
                     handlePage={(str: string) => onHandlePage(str)}
+                    TimeMark={UserLang === "zh-TW" ? LangTexts["zh-TW"].timeMark : LangTexts["default"].timeMark}
                 />
             </div>
             <div className="calander_body">
@@ -140,6 +159,7 @@ function App() {
                           const YYYY_MM_DD = date.format("YYYY-MM-DD")
                           return (
                               <DayCreater
+                                  UserLang={UserLang}
                                   date={date}
                                   initTable={initTable}
                                   key={YYYY_MM_DD}
