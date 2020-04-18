@@ -48,8 +48,11 @@ function App() {
     const LangTexts: ILangText = getLangText() // 語系標籤
     //init
     useEffect(() => {
-        createWeekTitle()
-        initArrangement()
+        if (Data) {
+            createWeekTitle()
+            initArrangement()
+        }
+        //eslint-disable-next-line
     }, [Data])
 
     useEffect(() => {
