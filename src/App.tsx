@@ -73,6 +73,8 @@ function App() {
             case 2:
                 setData(rowData3)
                 return
+            default:
+                return
         }
     }, [Page])
 
@@ -132,8 +134,6 @@ function App() {
 
     const onHandlePage = (type: string) => {
         if (Page === 0 && type === "l") return
-        const d = new Date(WeekTitle[6].add(1, "day").format("YYYY-MM-DD"))
-        console.log(d.toUTCString())
         type === "r"
             ? (function () {
                   setPage((prev) => prev + 1)
@@ -141,9 +141,8 @@ function App() {
               })()
             : (function () {
                   setPage((prev) => prev - 1)
-                  createWeekTitle(true)
+                  createWeekTitle(true) // isBack = true
               })()
-        // isBack = true
     }
     console.log("render times")
 
