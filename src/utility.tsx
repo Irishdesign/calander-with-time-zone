@@ -27,7 +27,7 @@ export const getEachIndexArr = (from: number, to: number) => {
     return arr
 }
 
-export const getDateOrTime = (str: string, type: string) => {
+export const getLocalDateOrTime = (str: string, type: string) => {
     let res = ""
     let UTCTimeObj = new Date(str)
     const localStr = UTCTimeObj.toLocaleString()

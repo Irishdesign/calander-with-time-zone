@@ -6,7 +6,7 @@ import rowData2 from "./data2.json"
 import rowData3 from "./data3.json"
 import Controller from "./components/controller"
 import DayCreater from "./components/day"
-import { getDateOrTime, getEachIndexArr, initClassTimeCol, getLangText } from "./utility"
+import { getLocalDateOrTime, getEachIndexArr, initClassTimeCol, getLangText } from "./utility"
 import { Dropdown } from "element-react"
 import "element-theme-default"
 
@@ -48,8 +48,13 @@ function App() {
     const LangTexts: ILangText = getLangText() // 語系標籤
     //init
     useEffect(() => {
+        createWeekTitle()
+        initArrangement()
+        //eslint-disable-next-line
+    }, [])
+
+    useEffect(() => {
         if (Data) {
-            createWeekTitle()
             initArrangement()
         }
         //eslint-disable-next-line
@@ -67,19 +72,22 @@ function App() {
                 return
             case 2:
                 setData(rowData3)
-                setBtnActive([true, false])
                 return
         }
     }, [Page])
 
-    const createWeekTitle = () => {
-        const LocalDate = getDateOrTime(Data.available[0].start, "d")
-        const LocalTime = getDateOrTime(Data.available[0].start, "t")
-
-        const today = new Date(`${LocalDate} ${LocalTime}:00`)
-        const today_weekday = today.getDay()
-        const startDate = dayjs(today).add(-today_weekday, "day")
-
+    const createWeekTitle = (isBack?: boolean) => {
+        let startDate: Dayjs
+        if (WeekTitle.length !== 0) {
+            startDate = isBack ? WeekTitle[0].add(-1, "week") : WeekTitle[6].add(1, "day")
+        } else {
+            // 以JSON第一筆資料初始化
+            let LocalDate = getLocalDateOrTime(Data.available[0].start, "d")
+            let LocalTime = getLocalDateOrTime(Data.available[0].start, "t")
+            let today = new Date(`${LocalDate} ${LocalTime}:00`)
+            const today_weekday = today.getDay()
+            startDate = dayjs(today).add(-today_weekday, "day")
+        }
         const DaysInTheWeek = []
         for (let i = 0; i < 7; i++) {
             DaysInTheWeek.push(dayjs(startDate).add(i, "day"))
@@ -98,10 +106,10 @@ function App() {
     const getIndexArrForEachDate = (targetData: IDate[]) => {
         const IndexArray: IndexArr = {}
         targetData.forEach((date) => {
-            const startD = getDateOrTime(date.start, "d")
-            const endD = getDateOrTime(date.end, "d")
-            const startT = getDateOrTime(date.start, "t")
-            const endT = getDateOrTime(date.end, "t")
+            const startD = getLocalDateOrTime(date.start, "d")
+            const endD = getLocalDateOrTime(date.end, "d")
+            const startT = getLocalDateOrTime(date.start, "t")
+            const endT = getLocalDateOrTime(date.end, "t")
             const startT_index = initTimeTable.indexOf(startT)
             const endT_index = initTimeTable.indexOf(endT)
 
@@ -124,9 +132,20 @@ function App() {
 
     const onHandlePage = (type: string) => {
         if (Page === 0 && type === "l") return
-        if (Page === 2 && type === "r") return
-        type === "r" ? setPage((prev) => prev + 1) : setPage((prev) => prev - 1)
+        const d = new Date(WeekTitle[6].add(1, "day").format("YYYY-MM-DD"))
+        console.log(d.toUTCString())
+        type === "r"
+            ? (function () {
+                  setPage((prev) => prev + 1)
+                  createWeekTitle()
+              })()
+            : (function () {
+                  setPage((prev) => prev - 1)
+                  createWeekTitle(true)
+              })()
+        // isBack = true
     }
+    console.log("render times")
 
     return (
         <div className="App">
