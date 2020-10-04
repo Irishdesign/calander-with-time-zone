@@ -1,5 +1,5 @@
 $green: #02cab9;
-$gray: #d2d2d2;
+$grey: #d2d2d2;
 
 @mixin btn_hover {
     i::before {
@@ -77,7 +77,7 @@ body {
                     font-weight: 500;
                     i {
                         &::before {
-                            color: $gray;
+                            color: $grey;
                             font-size: 9px;
                             font-weight: 100;
                         }
@@ -153,9 +153,9 @@ body {
             border-top: 4px solid $green;
             padding: 10px 0;
             &.expired {
-                border-top: 4px solid $gray;
+                border-top: 4px solid $grey;
                 div {
-                    color: $gray;
+                    color: $grey;
                 }
             }
         }
