@@ -5,15 +5,15 @@ export const getLangText = () => {
     const pramas = {
         "zh-TW": {
             TableTitle: "授課時間",
-            TimeMark: `* 時間以 台北 ${GMT} 顯示`,
-            Droplist: "切換語言",
-            DropOption: ["繁體中文", "英語"],
+            TimeMark: `* 時間以 ${City} ${GMT} 顯示`,
+            Droplist: "Language",
+            DropOption: ["繁體中文", "English"],
         },
         default: {
             TableTitle: "Availbale Time",
             TimeMark: `* All the timings listed are in your timezone: ${City} (${GMT})`,
             Droplist: "Language",
-            DropOption: ["Chinese", "English"],
+            DropOption: ["繁體中文", "English"],
         },
     }
     return pramas

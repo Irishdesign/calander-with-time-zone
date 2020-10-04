@@ -100,8 +100,6 @@ function App() {
     const initArrangement = () => {
         const availableIndex = getIndexArrForEachDate(Data.available)
         const bookedIndex = getIndexArrForEachDate(Data.booked)
-        // console.log("availableIndex", availableIndex)
-        // console.log("bookedIndex", bookedIndex)
         setWeekArrangement({ available: availableIndex, booked: bookedIndex })
     }
 
@@ -144,7 +142,6 @@ function App() {
                   createWeekTitle(true) // isBack = true
               })()
     }
-    console.log("render times")
 
     return (
         <div className="App">
@@ -156,15 +153,15 @@ function App() {
                         }}
                         menu={
                             <Dropdown.Menu>
-                                <Dropdown.Item command="zh-TW">
-                                    {UserLang === "zh-TW"
-                                        ? LangTexts["zh-TW"].DropOption[0]
-                                        : LangTexts["default"].DropOption[0]}
-                                </Dropdown.Item>
                                 <Dropdown.Item command="en-US">
                                     {UserLang === "zh-TW"
                                         ? LangTexts["zh-TW"].DropOption[1]
                                         : LangTexts["default"].DropOption[1]}
+                                </Dropdown.Item>
+                                <Dropdown.Item command="zh-TW">
+                                    {UserLang === "zh-TW"
+                                        ? LangTexts["zh-TW"].DropOption[0]
+                                        : LangTexts["default"].DropOption[0]}
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         }

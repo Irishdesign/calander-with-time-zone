@@ -1,5 +1,6 @@
 import React from "react"
 import dayjs from "dayjs"
+import { createLogicalAnd } from "typescript"
 const cx = require("classnames")
 interface I_Props {
     _date: dayjs.Dayjs
@@ -13,7 +14,7 @@ function DayCreater(props: I_Props) {
     const { _date, initTimeTable, bookedIndex, availableIndex, UserLang } = props
     const today = dayjs()
     const cn_Week = ["日", "一", "二", "三", "四", "五", "六"]
-
+   
     return (
         <div className="day_container">
             <div
